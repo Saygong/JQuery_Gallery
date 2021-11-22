@@ -3,113 +3,256 @@
     <head>
         <title>Galleria Jquery</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-        <script>
 
-            function sleepFor(sleepDuration){
-                let now = new Date().getTime();
-                while(new Date().getTime() < now + sleepDuration){
-                    /* Do nothing */
-                }
-            }
+        <script>
 
 
             jQuery(document).ready(function () {
-                let buttons = $("button");
-                let nextButton = $("#nextbutton");
-                let prevButton = $("#prevbutton");
-                buttons.css("height","350px");
-                buttons.css("width","30px");
-                buttons.css("border", "0px");
-                buttons.css("background-color", "#edede1");
 
-                nextButton.hover(function(){
-                    nextButton.css("background-color", "#e0e0d7");
-                }, function (){
-                    nextButton.css("border", "0px");
-                    nextButton.css("background-color", "#edede1");
-                })
+                //Header
+                let header = document.createElement("h2");
+                document.body.appendChild(header);
+                $("h2").text("My Gallery")
 
-                prevButton.hover(function(){
-                    prevButton.css("background-color", "#e0e0d7");
-                }, function (){
-                    prevButton.css("border", "0px");
-                    prevButton.css("background-color", "#edede1");
-                })
 
-                nextButton.text(">");
-                prevButton.text("<");
-                
+                //display: none
                 let images = $("img");
+                let buttons = $("button");
                 images.css("display", "none");
+                buttons.css("display", "none");
 
-                prevButton.offset({ top: 10, left: 683 });
-                nextButton.offset({ top: 10, left: 1240 });
 
-                let myImg = document.createElement("img")
+                //index
+                let i = 0
+
+
+                //previous DIV
+                let prevContainer = document.createElement("div");
+                prevContainer.id = "prevCont";
+                document.body.appendChild(prevContainer);
+                let prevCont = $("#prevCont");
+
+                //img of the previous section
+                let prevImg = document.createElement("img");
+                prevImg.id = "previmg";
+                prevContainer.appendChild(prevImg);
+                let previmg = $("#previmg");
+                previmg.attr("src", images.get((i-1)%4).getAttribute("src"));
+
+                //text of the previous section
+                let prevText = document.createElement("i");
+                prevText.id = "prevtext";
+                prevContainer.appendChild(prevText);
+                let prevtext = $("#prevtext");
+                prevtext.text("prev");
+                prevtext.css("visibility", "hidden");
+
+                //Hover of the previous section
+                previmg.hover(
+                    function (){
+                        previmg.css("opacity", "60%");
+                        prevtext.css("visibility", "visible");
+                    },
+                    function (){
+                        previmg.css("opacity", "100%");
+                        prevtext.css("visibility", "hidden");
+                    }
+                );
+
+
+                //Main DIV
+                let mainContainer = document.createElement("div");
+                mainContainer.id = "mainCont";
+                document.body.appendChild(mainContainer);
+                let mainCont = $("#mainCont");
+
+
+                //next DIV
+                let nextContainer = document.createElement("div");
+                nextContainer.id = "nextCont";
+                document.body.appendChild(nextContainer);
+                let nextCont = $("#nextCont");
+
+                //img of the next section
+                let nextImg = document.createElement("img");
+                nextImg.id = "nextimg";
+                nextContainer.appendChild(nextImg);
+                let nextimg = $("#nextimg");
+                nextimg.attr("src", images.get((i+1)%4).getAttribute("src"));
+
+                //text of the next section
+                let nextText = document.createElement("i");
+                nextText.id = "nexttext";
+                nextContainer.appendChild(nextText);
+                let nexttext = $("#nexttext");
+                nexttext.text("next");
+                nexttext.css("visibility", "hidden");
+
+                //Hover of the next section
+                nextimg.hover(
+                    function (){
+                        nextimg.css("opacity", "60%");
+                        nexttext.css("visibility", "visible");
+                    },
+                    function (){
+                        nextimg.css("opacity", "100%");
+                        nexttext.css("visibility", "hidden");
+                    }
+                );
+
+
+                //Start
+                let myImg = document.createElement("img");
                 myImg.id = "showed";
-                document.body.appendChild(myImg)
+                mainContainer.appendChild(myImg);
+                let img = $("#showed");
+                img.attr("src", images.get(i).getAttribute("src"));
 
 
-                let showedImg = $("#showed");
-                showedImg.offset({ top: 180, left: 60 })
-                showedImg.css("margin-left", "35%")
+                //On-click of the next section
+                nextCont.click(function (){
 
-                let i = 0;
-                let image = images.get(i);
-                showedImg.attr("src", image.getAttribute("src") )
-
-                nextButton.click(function(){
-
-                    showedImg.fadeOut(600);
                     i = (i+1)%4;
-                    image = images.get(i);
-                    sleepFor(500);
-                    showedImg.attr("src", image.getAttribute("src") )
-                    showedImg.fadeIn(600);
+                    mainCont.css("border", "1px solid #edede1");
+                    img.fadeOut(800);
+                    img.promise().done(function(){
+                        img.attr("src", images.get(i).getAttribute("src"));
+                        img.fadeIn(1000);
+                        mainCont.css("border", "1px solid black");
+                    });
+
+                    nextimg.fadeOut(1000);
+                    nextCont.css("border", "1px solid #edede1");
+                    nextimg.promise().done(function(){
+                        nextimg.attr("src", images.get((i+1)%4).getAttribute("src"));
+                        nextimg.fadeIn(1200);
+                        nextCont.css("border", "1px solid black");
+                    });
+
+                    previmg.fadeOut(1000);
+                    prevCont.css("border", "1px solid #edede1");
+                    previmg.promise().done(function(){
+                        previmg.attr("src", images.get((i-1)%4).getAttribute("src"));
+                        previmg.fadeIn(1200);
+                        prevCont.css("border", "1px solid black");
+                    });
 
                 })
 
-                prevButton.click(function(){
-                    showedImg.fadeOut(600);
+
+                //On-click of the previous section
+                prevCont.click(function (){
+
                     i = (i-1)%4;
-                    image = images.get(i);
-                    sleepFor(500);
-                    showedImg.attr("src", image.getAttribute("src") )
-                    showedImg.fadeIn(600);
+                    img.fadeOut(800);
+                    mainCont.css("border", "1px solid #edede1");
+                    img.promise().done(function(){
+                        img.attr("src", images.get(i).getAttribute("src"));
+                        img.fadeIn(1000);
+                        mainCont.css("border", "1px solid black");
+                    });
+
+                    nextimg.fadeOut(1000);
+                    nextCont.css("border", "1px solid #edede1");
+                    nextimg.promise().done(function(){
+                        nextimg.attr("src", images.get((i+1)%4).getAttribute("src"));
+                        nextimg.fadeIn(1200);
+                        nextCont.css("border", "1px solid black");
+                    });
+
+                    previmg.fadeOut(1000);
+                    prevCont.css("border", "1px solid #edede1");
+                    previmg.promise().done(function(){
+                        previmg.attr("src", images.get((i-1)%4).getAttribute("src"));
+                        previmg.fadeIn(1200);
+                        prevCont.css("border", "1px solid black");
+                    });
+
                 })
+
 
             });
-    
-    
+
         </script>
-    
+
         <style>
+
             body{
                 background-color: #edede1;
             }
 
-            img{
-                width: 500px;
-                height: 350px
+            h2{
+                text-align: center;
+                font-size: 50px;
+                margin-top: 2%;
             }
-    
+
+            #showed{
+                width: 100%;
+                height: 100%;
+                border-radius: 30px
+            }
+
+            #nextimg{
+                width: 100%;
+                height: 100%;
+                border-radius: 10px
+            }
+
+            #previmg{
+                width: 100%;
+                height: 100%;
+                border-radius: 10px
+            }
+
+
+            #prevCont{
+                width: 10%;
+                margin-left: 18%;
+                margin-top: 20%;
+                height: 100px;
+                border: 1px solid black;
+                float: left;
+                text-align:center;
+                border-radius: 10px
+            }
+
+            #mainCont{
+                width: 35%;
+                margin: 100px  5%;
+                height: 500px;
+                border: 1px solid black;
+                float: left;
+                border-radius: 30px;
+            }
+
+            #nextCont{
+                width: 10%;
+                margin-top: 20%;
+                height: 100px;
+                border: 1px solid black;
+                float: left;
+                text-align:center;
+                border-radius: 10px
+            }
+
+
         </style>
-    
-    
-    
+
+
+
     </head>
 
     <body>
-    
+
         <img src="images/clematide.jpg"  alt="clematis"/>
         <img src="images/orchidea.jpg" alt="orchidaceae"/>
         <img src="images/loto.jpg" alt="lotus"/>
         <img src="images/giacinto.jpg" alt="hyacinthus"/>
-    
+
         <button id="prevbutton">Prev</button>
         <button id="nextbutton">Next</button>
-    
-    </body>
+
+        </body>
 
 </html>
