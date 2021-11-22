@@ -1,0 +1,115 @@
+<html lang="en">
+
+    <head>
+        <title>Galleria Jquery</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+        <script>
+
+            function sleepFor(sleepDuration){
+                let now = new Date().getTime();
+                while(new Date().getTime() < now + sleepDuration){
+                    /* Do nothing */
+                }
+            }
+
+
+            jQuery(document).ready(function () {
+                let buttons = $("button");
+                let nextButton = $("#nextbutton");
+                let prevButton = $("#prevbutton");
+                buttons.css("height","350px");
+                buttons.css("width","30px");
+                buttons.css("border", "0px");
+                buttons.css("background-color", "#edede1");
+
+                nextButton.hover(function(){
+                    nextButton.css("background-color", "#e0e0d7");
+                }, function (){
+                    nextButton.css("border", "0px");
+                    nextButton.css("background-color", "#edede1");
+                })
+
+                prevButton.hover(function(){
+                    prevButton.css("background-color", "#e0e0d7");
+                }, function (){
+                    prevButton.css("border", "0px");
+                    prevButton.css("background-color", "#edede1");
+                })
+
+                nextButton.text(">");
+                prevButton.text("<");
+                
+                let images = $("img");
+                images.css("display", "none");
+
+                prevButton.offset({ top: 10, left: 683 });
+                nextButton.offset({ top: 10, left: 1240 });
+
+                let myImg = document.createElement("img")
+                myImg.id = "showed";
+                document.body.appendChild(myImg)
+
+
+                let showedImg = $("#showed");
+                showedImg.offset({ top: 180, left: 60 })
+                showedImg.css("margin-left", "35%")
+
+                let i = 0;
+                let image = images.get(i);
+                showedImg.attr("src", image.getAttribute("src") )
+
+                nextButton.click(function(){
+
+                    showedImg.fadeOut(600);
+                    i = (i+1)%4;
+                    image = images.get(i);
+                    sleepFor(500);
+                    showedImg.attr("src", image.getAttribute("src") )
+                    showedImg.fadeIn(600);
+
+                })
+
+                prevButton.click(function(){
+                    showedImg.fadeOut(600);
+                    i = (i-1)%4;
+                    image = images.get(i);
+                    sleepFor(500);
+                    showedImg.attr("src", image.getAttribute("src") )
+                    showedImg.fadeIn(600);
+                })
+
+            });
+    
+    
+        </script>
+    
+        <style>
+            body{
+                background-color: #edede1;
+            }
+
+            img{
+                width: 500px;
+                height: 350px
+            }
+    
+        </style>
+    
+    
+    
+    </head>
+
+    <body>
+    
+        <img src="images/clematide.jpg"  alt="clematis"/>
+        <img src="images/orchidea.jpg" alt="orchidaceae"/>
+        <img src="images/loto.jpg" alt="lotus"/>
+        <img src="images/giacinto.jpg" alt="hyacinthus"/>
+    
+        <button id="prevbutton">Prev</button>
+        <button id="nextbutton">Next</button>
+    
+    </body>
+
+</html>
